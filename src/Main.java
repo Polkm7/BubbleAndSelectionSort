@@ -1,9 +1,12 @@
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import java.util.Scanner;
 
 public class Main {
     private int[] array;
     private int[] array2;
-    //@TODO  1. Get arrays identical 2. Time sorts.
+    private long itemsSorted = 0;
+
     public static void main(String[] args) {
         Main main = new Main();
 
@@ -15,33 +18,66 @@ public class Main {
 
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter array size");
-        int arraySize = sc.nextInt();
-        main.createArray(arraySize);
 
-        System.out.println("Array 1 before bubble sort");
-        main.printArray();
-        main.bubbleSort();
-        System.out.println("Array 1 after bubble sort");
-        main.printArray();
 
-        System.out.println();
-        System.out.println("Array 2 before selection sort");
-        main.printArray2();
-        main.selectionSort();
-        System.out.println("Array 2 after selection sort");
-        main.printArray2();
+        main.runIteration(500, 1000);
+        main.runIteration(2500, 1000);
+        main.runIteration(5000, 1000);
+
+
+
+        /*        main.createArray(arraySize);
+
+        long runningTime = 0;
+        long startTime;
+        long endTime;
+        long timeElapsed;
+
+        int loopCount = 500;
+
+        main.resetItemsSorted();
+        for(int i = 0;i < loopCount; i++){
+            main.createArray(arraySize);
+            startTime = System.currentTimeMillis();
+            //start timer
+            main.bubbleSort();
+            //stop timer
+            endTime = System.currentTimeMillis();
+            timeElapsed = endTime - startTime;
+            runningTime += timeElapsed;
+
+        }
+        System.out.println("Time elapsed for bubble sort: " + runningTime);
+        System.out.println("Milliseconds per operation: " + (double)runningTime/loopCount + "." );
+        System.out.println("Items sorted: " + main.getItemsSorted());
+
+
+        runningTime = 0;
+        main.resetItemsSorted();
+        for(int i = 0;i < loopCount; i++){
+            main.createArray2(arraySize);
+            startTime = System.currentTimeMillis();
+            //start timer
+            main.selectionSort();
+            //stop timer
+            endTime = System.currentTimeMillis();
+            timeElapsed = endTime - startTime;
+            runningTime += timeElapsed;
+        }
+        System.out.println("Time elapsed for selection sort: " + runningTime);
+        System.out.println("Milliseconds per operation: " + (double)runningTime/loopCount + "." );
+        System.out.println("Items sorted: " + main.getItemsSorted());*/
+
     }
     private void createArray(int size){
         array = new int[size];
-        array2 = new int[size];
         for (int i = 0; i < array.length; i++){
 
             array[i] = (int) (Math.random()*1000);
 
         }
-        System.arraycopy(array, 0,array2,0,size);
     }
-/*
+
     private void createArray2(int size){
         array2 = new int[size];
         for (int i = 0; i < array2.length; i++){
@@ -49,7 +85,7 @@ public class Main {
 
         }
     }
-*/
+
     private void printArray(){
         System.out.print("Array 1: ");
         for(int number : array){
@@ -74,6 +110,7 @@ public class Main {
                     temp = array[i-1];
                     array[i-1] = array[i];
                     array[i] = temp;
+                    itemsSorted++;
                 }
             }
         }
@@ -101,7 +138,60 @@ public class Main {
                 temp = array2[j];
                 array2[j] = array2[iMin];
                 array2[iMin] = temp;
+                itemsSorted++;
             }
         }
+    }
+    private long getItemsSorted(){
+        return itemsSorted;
+    }
+    private void resetItemsSorted(){
+        itemsSorted = 0;
+    }
+    private void runIteration(int arraySize, int loopCount){
+        System.out.println("///////Running array size " + arraySize +  ". ////////");
+        createArray(arraySize);
+
+        long runningTime = 0;
+        long startTime;
+        long endTime;
+        long timeElapsed;
+
+
+        resetItemsSorted();
+        for(int i = 0;i < loopCount; i++){
+            createArray(arraySize);
+            startTime = System.currentTimeMillis();
+            //start timer
+            bubbleSort();
+            //stop timer
+            endTime = System.currentTimeMillis();
+            timeElapsed = endTime - startTime;
+            runningTime += timeElapsed;
+
+        }
+        System.out.println("Time elapsed for bubble sort: " + runningTime);
+        System.out.println("Milliseconds per operation: " + (double)runningTime/loopCount + "." );
+        System.out.println("Items sorted: " + getItemsSorted());
+
+
+        runningTime = 0;
+        resetItemsSorted();
+        for(int i = 0;i < loopCount; i++){
+            createArray2(arraySize);
+            startTime = System.currentTimeMillis();
+            //start timer
+            selectionSort();
+            //stop timer
+            endTime = System.currentTimeMillis();
+            timeElapsed = endTime - startTime;
+            runningTime += timeElapsed;
+        }
+        System.out.println("Time elapsed for selection sort: " + runningTime);
+        System.out.println("Milliseconds per operation: " + (double)runningTime/loopCount + "." );
+        System.out.println("Items sorted: " + getItemsSorted());
+
+        System.out.println();
+        System.out.println();
     }
 }
